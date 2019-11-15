@@ -1,0 +1,7 @@
+{
+  "parent": "discholder:block/discholder",
+  "textures": {
+    "0": "block/pink_wool",
+    "particle": "block/pink_wool"
+  }
+}

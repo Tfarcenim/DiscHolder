@@ -1,0 +1,7 @@
+{
+  "parent": "discholder:block/discholder",
+  "textures": {
+    "0": "block/magenta_wool",
+    "particle": "block/magenta_wool"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "variants": {
+
+  "facing=south": { "model": "discholder:block/green_discholder" },
+  "facing=west": { "model": "discholder:block/green_discholder", "y": 90 },
+  "facing=north": { "model": "discholder:block/green_discholder", "y": 180 },
+  "facing=east": { "model": "discholder:block/green_discholder", "y": 270 }
+  }
+}

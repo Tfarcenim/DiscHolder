@@ -1,0 +1,7 @@
+{
+  "parent": "discholder:block/discholder",
+  "textures": {
+    "0": "block/lime_wool",
+    "particle": "block/lime_wool"
+  }
+}
