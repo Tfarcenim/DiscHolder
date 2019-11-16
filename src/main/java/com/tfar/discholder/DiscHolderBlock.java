@@ -3,7 +3,6 @@ package com.tfar.discholder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,14 +19,9 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
@@ -49,7 +43,6 @@ public class DiscHolderBlock extends Block {
     return SHAPE;
   }
 
-  @OnlyIn(Dist.CLIENT)
   public float func_220080_a(BlockState state, IBlockReader worldIn, BlockPos pos) {
     return 1.0F;
   }
@@ -144,7 +137,7 @@ public class DiscHolderBlock extends Block {
     builder.add(FACING);
   }
 
-  public int getSlot(double inc) {
+  public static int getSlot(double inc) {
     return inc < 1 / 16d || inc > 15 / 16d ? -1 : (int) (8 * inc - .5);
   }
 
