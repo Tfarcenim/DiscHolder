@@ -43,7 +43,7 @@ public class DiscHolderBlock extends Block {
     return SHAPE;
   }
 
-  public float func_220080_a(BlockState state, IBlockReader worldIn, BlockPos pos) {
+  public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) {
     return 1.0F;
   }
 

@@ -78,7 +78,6 @@ public class DiscHolder
       registry.register(obj.setRegistryName(new ResourceLocation(MODID, name)));
       if (obj instanceof Block) discholders.add((Block) obj);
     }
-
   }
 
   public static class Objects {
