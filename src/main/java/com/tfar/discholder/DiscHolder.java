@@ -9,9 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -47,8 +48,9 @@ public class DiscHolder
   }
 
   private void doClientStuff(final FMLClientSetupEvent event) {
-    ClientRegistry.bindTileEntitySpecialRenderer(DiscHolderBlockEntity.class,new DiscHolderBlockEntityRenderer());
+    BlockEntityRendererRegistrar.registerRenderers();
   }
+
   // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
   // Event bus for receiving Registry Events)
   @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
