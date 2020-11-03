@@ -1,5 +1,6 @@
-package com.tfar.discholder;
+package tfar.discholder;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -19,14 +20,14 @@ public class DiscHolderBlockEntity extends TileEntity {
   };
 
   public DiscHolderBlockEntity() {
-    super(DiscHolder.Objects.Tiles.discholder);
+    super(DiscHolder.discholder);
   }
 
   @Override
-  public void read(CompoundNBT tag) {
+  public void read(BlockState state, CompoundNBT tag) {
     CompoundNBT invTag = tag.getCompound("inv");
     records.deserializeNBT(invTag);
-    super.read(tag);
+    super.read(state,tag);
   }
 
   @Nonnull
@@ -49,7 +50,7 @@ public class DiscHolderBlockEntity extends TileEntity {
 
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-    this.read(packet.getNbtCompound());
+    this.read(getBlockState(), packet.getNbtCompound());
   }
 
   public void updateClient(){

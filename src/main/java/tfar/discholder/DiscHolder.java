@@ -1,4 +1,4 @@
-package com.tfar.discholder;
+package tfar.discholder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -9,10 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -29,13 +27,11 @@ import java.util.Set;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(DiscHolder.MODID)
-public class DiscHolder
-{
-  // Directly reference a log4j logger.
+public class DiscHolder {
 
   public static final String MODID = "discholder";
 
-  private static final Logger LOGGER = LogManager.getLogger();
+  public static TileEntityType<DiscHolderBlockEntity> discholder;
 
   public DiscHolder() {
     // Register the setup method for modloading
@@ -60,7 +56,7 @@ public class DiscHolder
 
     @SubscribeEvent
     public static void block(final RegistryEvent.Register<Block> e) {
-      Arrays.stream(DyeColor.values()).forEach(dyeColor -> register(new DiscHolderBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2).sound(SoundType.WOOD))
+      Arrays.stream(DyeColor.values()).forEach(dyeColor -> register(new DiscHolderBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2).notSolid().sound(SoundType.WOOD))
               ,dyeColor.getTranslationKey() + "_discholder",e.getRegistry()));
     }
 
@@ -71,20 +67,13 @@ public class DiscHolder
 
     @SubscribeEvent
     public static void tile(final RegistryEvent.Register<TileEntityType<?>> e) {
-      e.getRegistry().register(TileEntityType.Builder.create(DiscHolderBlockEntity::new, discholders.toArray(new Block[0])).build(null).setRegistryName("discholder"));
+      discholder = TileEntityType.Builder.create(DiscHolderBlockEntity::new, discholders.toArray(new Block[0])).build(null);
+      e.getRegistry().register(discholder.setRegistryName("discholder"));
     }
 
     private static <T extends IForgeRegistryEntry<T>> void register(T obj, String name, IForgeRegistry<T> registry) {
       registry.register(obj.setRegistryName(new ResourceLocation(MODID, name)));
       if (obj instanceof Block) discholders.add((Block) obj);
-    }
-  }
-
-  public static class Objects {
-
-    @ObjectHolder(MODID)
-    public static class Tiles {
-      public static final TileEntityType<?> discholder = null;
     }
   }
 }

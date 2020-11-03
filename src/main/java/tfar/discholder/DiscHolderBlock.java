@@ -1,9 +1,8 @@
-package com.tfar.discholder;
+package tfar.discholder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
@@ -16,9 +15,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
@@ -51,34 +50,17 @@ public class DiscHolderBlock extends Block {
     return true;
   }
 
-  public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos) {
-    return false;
-  }
-
-  public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-    return false;
-  }
-
-  public boolean canEntitySpawn(BlockState state, IBlockReader worldIn, BlockPos pos, EntityType<?> type) {
-    return false;
-  }
-
-  @Override
-  public BlockRenderLayer getRenderLayer() {
-    return BlockRenderLayer.CUTOUT;
-  }
-
   public BlockState getStateForPlacement(BlockItemUseContext context) {
     return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
   }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
     if (!world.isRemote) {
-      Vec3d vec3d = hit.getHitVec();
+      Vector3d vec3d = hit.getHitVec();
       Direction facing = state.get(HorizontalBlock.HORIZONTAL_FACING);
       double inc = (facing == Direction.NORTH || facing == Direction.SOUTH) ? vec3d.x % 1 : vec3d.z % 1;
-      int slot = getSlot(inc);
+      int slot = getSlot(vec3d, facing);
       if (slot != -1) {
         ItemStack heldItem = player.getHeldItem(handIn);
         TileEntity blockEntity = world.getTileEntity(pos);
@@ -86,15 +68,16 @@ public class DiscHolderBlock extends Block {
           DiscHolderBlockEntity discHolder = (DiscHolderBlockEntity) blockEntity;
           if (heldItem.getItem() instanceof MusicDiscItem && discHolder.records.getStackInSlot(slot).isEmpty()) {
             discHolder.records.setStackInSlot(slot, heldItem.copy());
+            if (!player.abilities.isCreativeMode)
             player.getHeldItem(handIn).shrink(1);
           } else if (heldItem.isEmpty() && !discHolder.records.getStackInSlot(slot).isEmpty()) {
             ItemStack record = discHolder.records.extractItem(slot, 64, false);
-            world.addEntity(new ItemEntity(world, player.posX, pos.getY() + .5, player.posZ, record));
+            world.addEntity(new ItemEntity(world, player.getPosX(), pos.getY() + .5, player.getPosZ(), record));
           }
         }
       }
     }
-    return true;
+    return ActionResultType.SUCCESS;
   }
 
   @Override
@@ -137,8 +120,8 @@ public class DiscHolderBlock extends Block {
     builder.add(FACING);
   }
 
-  public static int getSlot(double inc) {
-    return inc < 1 / 16d || inc > 15 / 16d ? -1 : (int) (8 * inc - .5);
+  public static int getSlot(Vector3d inc, Direction facing) {
+    return 0;//inc < 1 / 16d || inc > 15 / 16d ? -1 : (int) (8 * inc - .5);
   }
 
   @Override
